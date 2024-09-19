@@ -16,9 +16,11 @@ private abstract class CompletableBinder : Binder() {
             TRANSACTION_complete -> {
                 onComplete(data)
             }
+
             TRANSACTION_canceled -> {
                 onCanceled()
             }
+
             else -> return super.onTransact(code, data, reply, flags)
         }
 
@@ -36,8 +38,8 @@ private abstract class TransactionContext : Binder() {
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
         when (code) {
-            TRANSACTION_requestCancel ->
-                requestCancel()
+            TRANSACTION_requestCancel -> requestCancel()
+
             else -> super.onTransact(code, data, reply, flags)
         }
 
@@ -49,6 +51,7 @@ private abstract class TransactionContext : Binder() {
     }
 }
 
+@Suppress("unused")
 suspend fun IBinder.suspendTransact(code: Int, data: Parcel, reply: Parcel): Boolean {
     var finalizer: () -> Unit = {}
 
@@ -84,7 +87,6 @@ suspend fun IBinder.suspendTransact(code: Int, data: Parcel, reply: Parcel): Boo
             }
 
             val link = IBinder.DeathRecipient {
-                @Suppress("ThrowableNotThrown")
                 it.resumeWithException(DeadObjectException())
             }
 
@@ -117,10 +119,11 @@ suspend fun IBinder.suspendTransact(code: Int, data: Parcel, reply: Parcel): Boo
     }
 }
 
+@Suppress("unused")
 fun suspendTransaction(
     data: Parcel,
     reply: Parcel,
-    block: suspend (reply: Parcel) -> Unit
+    block: suspend (reply: Parcel) -> Unit,
 ) {
     val completable = data.readStrongBinder()
 
@@ -132,7 +135,9 @@ fun suspendTransaction(
         try {
             block(r)
 
-            completable.transact(CompletableBinder.TRANSACTION_complete, r, null, IBinder.FLAG_ONEWAY)
+            completable.transact(
+                CompletableBinder.TRANSACTION_complete, r, null, IBinder.FLAG_ONEWAY
+            )
         } catch (e: DeadObjectException) {
             // remote service dead
             // ignore
@@ -140,7 +145,9 @@ fun suspendTransaction(
             try {
                 withContext(NonCancellable) {
                     if (e is CancellationException) {
-                        completable.transact(CompletableBinder.TRANSACTION_canceled, r, null, IBinder.FLAG_ONEWAY)
+                        completable.transact(
+                            CompletableBinder.TRANSACTION_canceled, r, null, IBinder.FLAG_ONEWAY
+                        )
                     } else {
                         r.setDataPosition(0)
 
@@ -148,7 +155,9 @@ fun suspendTransaction(
                             stackTrace = e.stackTrace
                         })
 
-                        completable.transact(CompletableBinder.TRANSACTION_complete, r, null, IBinder.FLAG_ONEWAY)
+                        completable.transact(
+                            CompletableBinder.TRANSACTION_complete, r, null, IBinder.FLAG_ONEWAY
+                        )
                     }
                 }
             } catch (e: Exception) {

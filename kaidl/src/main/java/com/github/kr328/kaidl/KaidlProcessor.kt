@@ -46,20 +46,20 @@ class KaidlProcessor(private val codeGenerator: CodeGenerator) : SymbolProcessor
 
         codeGenerator.createNewFile(dependencies, className.packageName, className.simpleName)
             .writer().use {
-            FileSpec.builder(className.packageName, "")
-                .addComment("Generated for $className")
-                .addAnnotation(
-                    AnnotationSpec.builder(Suppress::class)
-                        .addMember(DEFAULT_SUPPRESS.joinToString(", ") { s -> "\"$s\"" })
-                        .build()
-                )
-                .addStub(className, functions)
-                .addProxyClass(className, functions)
-                .addWrap(className)
-                .addUnwrap(className)
-                .build()
-                .writeTo(it)
-        }
+                FileSpec.builder(className.packageName, "")
+                    .addFileComment("Generated for $className", arrayOf<Any>())
+                    .addAnnotation(
+                        AnnotationSpec.builder(Suppress::class)
+                            .addMember(DEFAULT_SUPPRESS.joinToString(", ") { s -> "\"$s\"" })
+                            .build()
+                    )
+                    .addStub(className, functions)
+                    .addProxyClass(className, functions)
+                    .addWrap(className)
+                    .addUnwrap(className)
+                    .build()
+                    .writeTo(it)
+            }
     }
 
     companion object {

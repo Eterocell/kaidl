@@ -4,6 +4,18 @@ plugins {
     `maven-publish`
 }
 
+
+android {
+    namespace = "com.github.kr328.kaidl"
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 dependencies {
-    compileOnly(kotlinv.coroutine)
+    compileOnly(libs.coroutine)
 }

@@ -1,0 +1,20 @@
+[versions]
+kotlin = "2.0.20"
+coroutine = "1.9.0"
+ksp = "2.0.20-1.0.25"
+poet = "1.18.1"
+agp = "8.6.1"
+junit = "4.13.2"
+androidJunit = "1.2.1"
+espresso = "3.6.1"
+
+[libraries]
+kotlin-gradle = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
+poet = { group = "com.squareup", name = "kotlinpoet", version.ref = "poet" }
+ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
+ksp-gradle = { group = "com.google.devtools.ksp", name = "symbol-processing-gradle-plugin", version.ref = "ksp" }
+agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidJunit" }
+espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }

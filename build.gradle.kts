@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_VARIABLE")
-
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import java.util.*
@@ -11,9 +9,9 @@ buildscript {
     }
 
     dependencies {
-        classpath(androidv.gradle)
-        classpath(kotlinv.ksp.gradle)
-        classpath(kotlinv.gradle)
+        classpath(libs.agp)
+        classpath(libs.ksp.gradle)
+        classpath(libs.kotlin.gradle)
     }
 }
 
@@ -32,11 +30,11 @@ subprojects {
         val android = extensions.findByType(BaseExtension::class)?.apply {
             val isLibrary = this is LibraryExtension
 
-            compileSdkVersion(30)
+            compileSdkVersion(34)
 
             defaultConfig {
                 minSdk = 21
-                targetSdk = 30
+                targetSdk = 34
 
                 versionName = version.toString()
                 versionCode = version.toString()
@@ -123,5 +121,5 @@ subprojects {
 }
 
 task("clean", type = Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }

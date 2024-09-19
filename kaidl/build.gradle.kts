@@ -19,6 +19,6 @@ tasks.withType(KotlinCompile::class) {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(kotlinv.ksp.api)
-    implementation(kotlinv.poet)
+    implementation(libs.ksp.api)
+    implementation(libs.poet)
 }
